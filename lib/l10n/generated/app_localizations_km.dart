@@ -251,7 +251,7 @@ class AppLocalizationsKm extends AppLocalizations {
   String get linkedViolations => 'បទល្មើសដែលពាក់ព័ន្ធ';
 
   @override
-  String get useTheDemoCode123456 => 'សូមប្រើលេខកូដសាកល្បង 123456។';
+  String get invalidVerificationCode => 'លេខកូដផ្ទៀងផ្ទាត់មិនត្រឹមត្រូវ។';
 
   @override
   String get verifyYourNumber => 'ផ្ទៀងផ្ទាត់លេខទូរសព្ទ';
@@ -260,7 +260,7 @@ class AppLocalizationsKm extends AppLocalizations {
   String get resendCodeIn030 => 'ផ្ញើលេខកូដម្តងទៀតក្នុង 0:30';
 
   @override
-  String get demoPrototypeUseCode123456 => 'គំរូសាកល្បង៖ ប្រើលេខកូដ 123456។';
+  String get testBuildUseCode123456 => 'សាកល្បង៖ ប្រើលេខកូដ 123456។';
 
   @override
   String get verifyContinue => 'ផ្ទៀងផ្ទាត់ និងបន្ត';
@@ -309,6 +309,13 @@ class AppLocalizationsKm extends AppLocalizations {
   @override
   String get enterAValidCambodianPhoneNumber =>
       'សូមបញ្ចូលលេខទូរសព្ទកម្ពុជាដែលត្រឹមត្រូវ។';
+
+  @override
+  String get noTestAccountFoundForThisNumber =>
+      'រកមិនឃើញគណនីសាកល្បងសម្រាប់លេខទូរសព្ទនេះទេ។';
+
+  @override
+  String get unableToSignIn => 'មិនអាចចូលបានទេឥឡូវនេះ។ សូមព្យាយាមម្តងទៀត។';
 
   @override
   String get welcomeBack => 'សូមស្វាគមន៍មកវិញ';

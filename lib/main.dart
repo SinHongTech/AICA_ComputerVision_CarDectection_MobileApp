@@ -6,6 +6,7 @@ import 'theme/app_theme.dart';
 
 import 'UI/splash_screen.dart';
 import 'UI/widgets/app_components.dart';
+import 'data/auth/user_repository.dart';
 import 'data/demo_store.dart';
 import 'data/local/local_storage_service.dart';
 
@@ -41,7 +42,7 @@ class _SmartTrafficAppState extends State<SmartTrafficApp> {
             const bool.fromEnvironment('AICA_RESET_ONBOARDING'))) {
       await localStorage.resetOnboardingForDebug();
     }
-    await demoStore.initialize(localStorage);
+    await demoStore.initialize(localStorage, userRepository: appUserRepository);
     return demoStore.hasCompletedOnboarding;
   }
 

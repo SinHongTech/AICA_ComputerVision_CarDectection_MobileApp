@@ -301,10 +301,14 @@ class ProfileScreen extends StatelessWidget {
         ),
         SizedBox(height: 24),
         FilledButton.icon(
-          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute<void>(builder: (_) => SignInScreen()),
-            (_) => false,
-          ),
+          onPressed: () async {
+            await demoStore.signOut();
+            if (!context.mounted) return;
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute<void>(builder: (_) => SignInScreen()),
+              (_) => false,
+            );
+          },
           icon: Icon(Icons.logout),
           label: Text(context.l10n.logOut),
           style: FilledButton.styleFrom(

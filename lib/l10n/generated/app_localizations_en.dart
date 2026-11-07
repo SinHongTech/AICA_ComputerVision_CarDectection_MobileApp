@@ -248,7 +248,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get linkedViolations => 'Linked violations';
 
   @override
-  String get useTheDemoCode123456 => 'Use the demo code 123456.';
+  String get invalidVerificationCode => 'Invalid verification code.';
 
   @override
   String get verifyYourNumber => 'Verify your number';
@@ -257,7 +257,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resendCodeIn030 => 'Resend code in 0:30';
 
   @override
-  String get demoPrototypeUseCode123456 => 'Demo prototype: use code 123456.';
+  String get testBuildUseCode123456 => 'Test build: use code 123456.';
 
   @override
   String get verifyContinue => 'Verify & continue';
@@ -306,6 +306,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get enterAValidCambodianPhoneNumber =>
       'Enter a valid Cambodian phone number.';
+
+  @override
+  String get noTestAccountFoundForThisNumber =>
+      'No test account found for this phone number.';
+
+  @override
+  String get unableToSignIn => 'Unable to sign in right now. Please try again.';
 
   @override
   String get welcomeBack => 'Welcome back';

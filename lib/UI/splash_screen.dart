@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../data/demo_store.dart';
 import '../l10n/l10n_context.dart';
 import '../theme/app_colors.dart';
+import 'app_shell.dart';
 import 'onboarding_screen.dart';
 import 'sign_in_screen.dart';
 import 'widgets/app_components.dart';
@@ -35,7 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(
-        builder: (_) => completedOnboarding
+        builder: (_) => demoStore.isSignedIn
+            ? const AppShell()
+            : completedOnboarding
             ? const SignInScreen()
             : const OnboardingScreen(),
       ),

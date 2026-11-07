@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
@@ -6,6 +7,7 @@ import '../l10n/l10n_context.dart';
 
 import 'package:flutter/services.dart';
 
+import '../data/auth/user_repository.dart';
 import '../data/demo_store.dart';
 import 'app_shell.dart';
 import 'widgets/app_components.dart';
@@ -20,6 +22,7 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen> {
   final _code = TextEditingController();
+  bool _isVerifying = false;
 
   @override
   void dispose() {
@@ -27,16 +30,31 @@ class _VerifyScreenState extends State<VerifyScreen> {
     super.dispose();
   }
 
-  void _verify() {
-    if (_code.text != '123456') {
-      showDemoMessage(context, context.l10n.useTheDemoCode123456);
-      return;
+  Future<void> _verify() async {
+    if (_code.text.length != 6 || _isVerifying) return;
+
+    setState(() => _isVerifying = true);
+    try {
+      final user = await appUserRepository.verifyCode(widget.phone, _code.text);
+      if (!mounted) return;
+
+      if (user == null) {
+        setState(() => _isVerifying = false);
+        showDemoMessage(context, context.l10n.invalidVerificationCode);
+        return;
+      }
+
+      await demoStore.signIn(user);
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute<void>(builder: (_) => AppShell()),
+        (_) => false,
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isVerifying = false);
+      showDemoMessage(context, context.l10n.unableToSignIn);
     }
-    demoStore.setPhone(widget.phone);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute<void>(builder: (_) => AppShell()),
-      (_) => false,
-    );
   }
 
   @override
@@ -124,6 +142,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                 controller: _code,
                                 autofocus: true,
                                 keyboardType: TextInputType.number,
+                                autofillHints: const [
+                                  AutofillHints.oneTimeCode,
+                                ],
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(6),
@@ -162,42 +183,46 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(height: 16),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: aicaTone(context, Color(0xFFEAF1FF)),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.info,
-                                color: aicaBlue(context),
-                                size: 20,
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  context.l10n.demoPrototypeUseCode123456,
-                                  style: TextStyle(
-                                    fontFamily: aicaFontFamily,
-                                    fontFamilyFallback: khmerFontFallback,
-                                    color: aicaBlue(context),
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
+                        if (kDebugMode) ...[
+                          SizedBox(height: 16),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: aicaTone(context, Color(0xFFEAF1FF)),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.info,
+                                  color: aicaBlue(context),
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    context.l10n.testBuildUseCode123456,
+                                    style: TextStyle(
+                                      fontFamily: aicaFontFamily,
+                                      fontFamilyFallback: khmerFontFallback,
+                                      color: aicaBlue(context),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                         Spacer(),
                         FilledButton(
-                          onPressed: _code.text.length == 6 ? _verify : null,
+                          onPressed: _code.text.length == 6 && !_isVerifying
+                              ? _verify
+                              : null,
                           style: FilledButton.styleFrom(
                             disabledBackgroundColor: aicaBlue(context)
                                 .withValues(alpha: .45),

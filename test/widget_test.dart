@@ -54,6 +54,34 @@ void main() {
     expect(find.text('Enter a valid Cambodian phone number.'), findsOneWidget);
   });
 
+  testWidgets('sign in finds the test account', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: SignInScreen()));
+
+    await tester.enterText(find.byType(TextField), '12345678');
+    await tester.tap(find.textContaining('I agree to the'));
+    await tester.tap(find.text('Send code'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Verify your number'), findsOneWidget);
+  });
+
+  testWidgets('sign in rejects a phone missing from the repository', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: SignInScreen()));
+
+    await tester.enterText(find.byType(TextField), '99999999');
+    await tester.tap(find.textContaining('I agree to the'));
+    await tester.tap(find.text('Send code'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(
+      find.text('No test account found for this phone number.'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('OTP rejects an invalid code and accepts 123456', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(home: VerifyScreen(phone: '12345678')),
@@ -66,8 +94,9 @@ void main() {
 
     await tester.enterText(find.byType(TextField), '000000');
     await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
-    expect(find.text('Use the demo code 123456.'), findsOneWidget);
+    expect(find.text('Invalid verification code.'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), '123456');
     await tester.testTextInput.receiveAction(TextInputAction.done);

@@ -548,11 +548,11 @@ abstract class AppLocalizations {
   /// **'Linked violations'**
   String get linkedViolations;
 
-  /// No description provided for @useTheDemoCode123456.
+  /// No description provided for @invalidVerificationCode.
   ///
   /// In en, this message translates to:
-  /// **'Use the demo code 123456.'**
-  String get useTheDemoCode123456;
+  /// **'Invalid verification code.'**
+  String get invalidVerificationCode;
 
   /// No description provided for @verifyYourNumber.
   ///
@@ -566,11 +566,11 @@ abstract class AppLocalizations {
   /// **'Resend code in 0:30'**
   String get resendCodeIn030;
 
-  /// No description provided for @demoPrototypeUseCode123456.
+  /// No description provided for @testBuildUseCode123456.
   ///
   /// In en, this message translates to:
-  /// **'Demo prototype: use code 123456.'**
-  String get demoPrototypeUseCode123456;
+  /// **'Test build: use code 123456.'**
+  String get testBuildUseCode123456;
 
   /// No description provided for @verifyContinue.
   ///
@@ -661,6 +661,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a valid Cambodian phone number.'**
   String get enterAValidCambodianPhoneNumber;
+
+  /// No description provided for @noTestAccountFoundForThisNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'No test account found for this phone number.'**
+  String get noTestAccountFoundForThisNumber;
+
+  /// No description provided for @unableToSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to sign in right now. Please try again.'**
+  String get unableToSignIn;
 
   /// No description provided for @welcomeBack.
   ///

@@ -1,28 +1,37 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../model/violation.dart';
+import 'auth/auth_user.dart';
+import 'auth/user_repository.dart';
 import 'demo_data.dart';
 import 'local/local_storage_service.dart';
 
 class DemoStore extends ChangeNotifier {
+  static const defaultNotificationPreferences = {
+    'New potential violations': true,
+    'Official fine confirmed': true,
+    'Payment reminders': true,
+    'Tips & news': false,
+  };
+
   LocalStorageService? _localStorage;
 
   String phone = '12 345 678';
   String name = 'Sophea Vann';
   String email = '';
   bool hasCompletedOnboarding = false;
+  bool isSignedIn = false;
   String languageCode = 'en';
   bool darkMode = false;
   final Set<String> selectedFineIds = {'speeding', 'helmet'};
   final Set<String> paidFineIds = {};
   final Set<int> readNotificationIds = {};
   final Map<String, String> appeals = {};
-  final Map<String, bool> notificationPreferences = {
-    'New potential violations': true,
-    'Official fine confirmed': true,
-    'Payment reminders': true,
-    'Tips & news': false,
-  };
+  final Map<String, bool> notificationPreferences = Map.of(
+    defaultNotificationPreferences,
+  );
 
   List<Violation> get payable => demoViolations
       .where(
@@ -43,7 +52,10 @@ class DemoStore extends ChangeNotifier {
     (index) => index,
   ).any((index) => !readNotificationIds.contains(index));
 
-  Future<void> initialize(LocalStorageService localStorage) async {
+  Future<void> initialize(
+    LocalStorageService localStorage, {
+    UserRepository? userRepository,
+  }) async {
     _localStorage = localStorage;
     hasCompletedOnboarding = localStorage.isOnboardingCompleted();
     languageCode = localStorage.getLanguage();
@@ -51,6 +63,33 @@ class DemoStore extends ChangeNotifier {
     readNotificationIds
       ..clear()
       ..addAll(localStorage.getReadNotificationIds());
+    notificationPreferences
+      ..clear()
+      ..addAll(
+        defaultNotificationPreferences.map(
+          (key, defaultValue) => MapEntry(
+            key,
+            localStorage.getNotificationPreference(
+              key,
+              defaultValue: defaultValue,
+            ),
+          ),
+        ),
+      );
+
+    isSignedIn = false;
+    final sessionPhone = localStorage.getSessionPhone();
+    if (sessionPhone != null) {
+      final user = await (userRepository ?? appUserRepository).findByPhone(
+        sessionPhone,
+      );
+      if (user != null) {
+        _applyUser(user);
+        isSignedIn = true;
+      } else {
+        await localStorage.clearSessionPhone();
+      }
+    }
     notifyListeners();
   }
 
@@ -83,6 +122,34 @@ class DemoStore extends ChangeNotifier {
     name = newName;
     email = newEmail;
     notifyListeners();
+  }
+
+  Future<void> signIn(AuthUser user) async {
+    _applyUser(user);
+    isSignedIn = true;
+    notifyListeners();
+    await _localStorage?.setSessionPhone(user.phone);
+  }
+
+  Future<void> signOut() async {
+    isSignedIn = false;
+    phone = '12 345 678';
+    name = 'Sophea Vann';
+    email = '';
+    selectedFineIds
+      ..clear()
+      ..addAll({'speeding', 'helmet'});
+    paidFineIds.clear();
+    readNotificationIds.clear();
+    appeals.clear();
+    notificationPreferences
+      ..clear()
+      ..addAll(defaultNotificationPreferences);
+    notifyListeners();
+
+    await _localStorage?.clearSessionPhone();
+    await _localStorage?.saveReadNotificationIds({});
+    await _localStorage?.clearNotificationPreferences();
   }
 
   void toggleFine(String id) {
@@ -125,6 +192,7 @@ class DemoStore extends ChangeNotifier {
   void setPreference(String key, bool value) {
     notificationPreferences[key] = value;
     notifyListeners();
+    unawaited(_localStorage?.setNotificationPreference(key, value));
   }
 
   Future<void> setDarkMode(bool value) async {
@@ -133,12 +201,19 @@ class DemoStore extends ChangeNotifier {
     await _localStorage?.setDarkMode(value);
   }
 
+  void _applyUser(AuthUser user) {
+    phone = formatPhone(user.phone);
+    name = user.fullName;
+    email = user.email;
+  }
+
   void reset() {
     _localStorage = null;
     phone = '12 345 678';
     name = 'Sophea Vann';
     email = '';
     hasCompletedOnboarding = false;
+    isSignedIn = false;
     languageCode = 'en';
     darkMode = false;
     selectedFineIds
@@ -149,12 +224,7 @@ class DemoStore extends ChangeNotifier {
     appeals.clear();
     notificationPreferences
       ..clear()
-      ..addAll({
-        'New potential violations': true,
-        'Official fine confirmed': true,
-        'Payment reminders': true,
-        'Tips & news': false,
-      });
+      ..addAll(defaultNotificationPreferences);
     notifyListeners();
   }
 }

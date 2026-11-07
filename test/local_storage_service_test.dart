@@ -68,16 +68,60 @@ void main() {
     expect(storage.getReadNotificationIds(), {1, 3});
   });
 
+  test('session phone can be saved and cleared', () async {
+    final storage = await createStorage();
+    await storage.setSessionPhone('12345678');
+    final restoredStorage = await LocalStorageService.create();
+
+    expect(restoredStorage.getSessionPhone(), '12345678');
+
+    await restoredStorage.clearSessionPhone();
+    expect(restoredStorage.getSessionPhone(), isNull);
+  });
+
+  test('notification preference defaults and persists', () async {
+    final storage = await createStorage();
+
+    expect(
+      storage.getNotificationPreference(
+        'Payment reminders',
+        defaultValue: true,
+      ),
+      isTrue,
+    );
+
+    await storage.setNotificationPreference('Payment reminders', false);
+    final restoredStorage = await LocalStorageService.create();
+
+    expect(
+      restoredStorage.getNotificationPreference(
+        'Payment reminders',
+        defaultValue: true,
+      ),
+      isFalse,
+    );
+  });
+
   test('clear removes all local preferences', () async {
     final storage = await createStorage();
     await storage.setOnboardingCompleted(true);
     await storage.setLanguage('km');
     await storage.saveReadNotificationIds({1, 2});
+    await storage.setSessionPhone('12345678');
+    await storage.setNotificationPreference('Payment reminders', false);
 
     await storage.clearLocalPreferences();
 
     expect(storage.isOnboardingCompleted(), isFalse);
     expect(storage.getLanguage(), 'en');
     expect(storage.getReadNotificationIds(), isEmpty);
+    expect(storage.getSessionPhone(), isNull);
+    expect(
+      storage.getNotificationPreference(
+        'Payment reminders',
+        defaultValue: true,
+      ),
+      isTrue,
+    );
   });
 }

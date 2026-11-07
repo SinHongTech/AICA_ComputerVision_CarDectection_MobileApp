@@ -8,6 +8,8 @@ class LocalStorageService {
   static const _darkModeKey = 'is_dark_mode';
   static const _languageKey = 'language';
   static const _readNotificationIdsKey = 'read_notification_ids';
+  static const _sessionPhoneKey = 'session_phone';
+  static const _notificationPreferencePrefix = 'notification_preference_';
 
   final SharedPreferences? _preferences;
 
@@ -91,12 +93,69 @@ class LocalStorageService {
     }
   }
 
+  String? getSessionPhone() {
+    try {
+      final phone = _preferences?.getString(_sessionPhoneKey);
+      return phone == null || phone.isEmpty ? null : phone;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> setSessionPhone(String phone) async {
+    try {
+      await _preferences?.setString(_sessionPhoneKey, phone);
+    } catch (_) {
+      // The session can continue in memory if storage is unavailable.
+    }
+  }
+
+  Future<void> clearSessionPhone() async {
+    try {
+      await _preferences?.remove(_sessionPhoneKey);
+    } catch (_) {
+      // Safe defaults will be used the next time the app starts.
+    }
+  }
+
+  bool getNotificationPreference(String key, {required bool defaultValue}) {
+    try {
+      return _preferences?.getBool('$_notificationPreferencePrefix$key') ??
+          defaultValue;
+    } catch (_) {
+      return defaultValue;
+    }
+  }
+
+  Future<void> setNotificationPreference(String key, bool value) async {
+    try {
+      await _preferences?.setBool('$_notificationPreferencePrefix$key', value);
+    } catch (_) {
+      // Continue with the current in-memory preference.
+    }
+  }
+
+  Future<void> clearNotificationPreferences() async {
+    try {
+      final keys = _preferences?.getKeys() ?? const <String>{};
+      for (final key in keys) {
+        if (key.startsWith(_notificationPreferencePrefix)) {
+          await _preferences?.remove(key);
+        }
+      }
+    } catch (_) {
+      // Defaults apply when preferences cannot be read.
+    }
+  }
+
   Future<void> clearLocalPreferences() async {
     try {
       await _preferences?.remove(_onboardingKey);
       await _preferences?.remove(_languageKey);
       await _preferences?.remove(_darkModeKey);
       await _preferences?.remove(_readNotificationIdsKey);
+      await _preferences?.remove(_sessionPhoneKey);
+      await clearNotificationPreferences();
     } catch (_) {
       // Safe defaults will be used the next time the app starts.
     }

@@ -6,6 +6,7 @@ import '../l10n/l10n_context.dart';
 
 import 'package:flutter/services.dart';
 
+import '../data/auth/user_repository.dart';
 import 'verify_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -16,7 +17,8 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _phoneController = TextEditingController();
-  bool _consented = true;
+  bool _consented = false;
+  bool _checkingAccount = false;
 
   @override
   void dispose() {
@@ -24,19 +26,46 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  void _sendCode() {
+  Future<void> _sendCode() async {
     final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    if (!_consented || digits.length < 8 || digits.length > 9) {
-      final message = !_consented
-          ? context.l10n.pleaseAgreeToTheTermsBeforeContinuing
-          : context.l10n.enterAValidCambodianPhoneNumber;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+    if (digits.length < 8 || digits.length > 9) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.enterAValidCambodianPhoneNumber)),
+      );
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => VerifyScreen(phone: digits)),
-    );
+    if (!_consented) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.pleaseAgreeToTheTermsBeforeContinuing),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _checkingAccount = true);
+    try {
+      final user = await appUserRepository.findByPhone(digits);
+      if (!mounted) return;
+      setState(() => _checkingAccount = false);
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.noTestAccountFoundForThisNumber)),
+        );
+        return;
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => VerifyScreen(phone: user.phone),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _checkingAccount = false);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(context.l10n.unableToSignIn)));
+    }
   }
 
   @override
@@ -205,8 +234,16 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         Spacer(),
                         FilledButton.icon(
-                          onPressed: _sendCode,
-                          icon: Icon(Icons.sms_outlined),
+                          onPressed: _checkingAccount ? null : _sendCode,
+                          icon: _checkingAccount
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.sms_outlined),
                           label: Text(context.l10n.sendCode),
                         ),
                         SizedBox(height: 16),

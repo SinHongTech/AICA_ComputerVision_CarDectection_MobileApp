@@ -55,5 +55,6 @@ app.*.map.json
 # Step Markdown
 STEP_*.md
 
+
 # Figma
 /docs/figma_mapping.md

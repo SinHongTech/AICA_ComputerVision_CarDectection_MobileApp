@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:car_detection/UI/app_shell.dart';
 import 'package:car_detection/UI/onboarding_screen.dart';
 import 'package:car_detection/UI/sign_in_screen.dart';
 import 'package:car_detection/UI/splash_screen.dart';
@@ -47,6 +48,41 @@ void main() {
     expect(find.byType(SplashScreen), findsOneWidget);
     await tester.pumpAndSettle();
     expect(find.byType(SignInScreen), findsOneWidget);
+  });
+
+  testWidgets('saved test session opens the app shell', (tester) async {
+    final storage = await LocalStorageService.create();
+    await storage.setOnboardingCompleted(true);
+    await storage.setSessionPhone('12345678');
+
+    await tester.pumpWidget(
+      SmartTrafficApp(storageFactory: () async => storage),
+    );
+
+    expect(find.byType(SplashScreen), findsOneWidget);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppShell), findsOneWidget);
+    expect(demoStore.isSignedIn, isTrue);
+    expect(demoStore.phone, '12 345 678');
+  });
+
+  testWidgets('unknown saved session falls back to sign in', (tester) async {
+    final storage = await LocalStorageService.create();
+    await storage.setOnboardingCompleted(true);
+    await storage.setSessionPhone('99999999');
+
+    await tester.pumpWidget(
+      SmartTrafficApp(storageFactory: () async => storage),
+    );
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+      if (find.byType(SignInScreen).evaluate().isNotEmpty) break;
+    }
+
+    expect(find.byType(SignInScreen), findsOneWidget);
+    expect(demoStore.isSignedIn, isFalse);
+    expect(storage.getSessionPhone(), isNull);
   });
 
   testWidgets(
