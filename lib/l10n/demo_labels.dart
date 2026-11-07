@@ -2,7 +2,20 @@ import 'package:flutter/widgets.dart';
 
 import '../model/violation.dart';
 import '../data/demo_data.dart';
+import '../data/demo_store.dart';
 import 'l10n_context.dart';
+
+/// Runtime status: paying a fine marks it paid, and an appeal puts it in
+/// dispute so it is no longer payable.
+ViolationStatus effectiveStatus(Violation violation) {
+  if (demoStore.paidFineIds.contains(violation.id)) {
+    return ViolationStatus.paid;
+  }
+  if (demoStore.appeals.containsKey(violation.id)) {
+    return ViolationStatus.disputed;
+  }
+  return violation.status;
+}
 
 String violationTitle(BuildContext context, Violation violation) =>
     switch (violation.id) {

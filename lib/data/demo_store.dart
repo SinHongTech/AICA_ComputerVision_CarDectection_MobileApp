@@ -28,7 +28,8 @@ class DemoStore extends ChangeNotifier {
       .where(
         (v) =>
             v.status == ViolationStatus.confirmed &&
-            !paidFineIds.contains(v.id),
+            !paidFineIds.contains(v.id) &&
+            !appeals.containsKey(v.id),
       )
       .toList();
   int get selectedTotal => payable
@@ -36,6 +37,11 @@ class DemoStore extends ChangeNotifier {
       .fold(0, (sum, v) => sum + v.amount);
 
   String get languageName => languageCode == 'km' ? 'ខ្មែរ' : 'English';
+
+  bool get hasUnreadNotifications => List.generate(
+    demoNotifications.length,
+    (index) => index,
+  ).any((index) => !readNotificationIds.contains(index));
 
   Future<void> initialize(LocalStorageService localStorage) async {
     _localStorage = localStorage;
@@ -61,7 +67,12 @@ class DemoStore extends ChangeNotifier {
   }
 
   void setPhone(String value) {
-    final digits = value.replaceAll(RegExp(r'\D'), '');
+    var digits = value.replaceAll(RegExp(r'\D'), '');
+    // Cambodian mobile numbers are 9 digits locally; drop the trunk 0 so the
+    // stored value matches the +855 country code shown next to it.
+    if (digits.length == 9 && digits.startsWith('0')) {
+      digits = digits.substring(1);
+    }
     phone = digits.length >= 8
         ? '${digits.substring(0, 2)} ${digits.substring(2, 5)} ${digits.substring(5)}'
         : value;

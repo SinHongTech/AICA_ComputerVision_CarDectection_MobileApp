@@ -9,10 +9,17 @@ import '../../data/demo_data.dart';
 import '../../model/violation.dart';
 
 const ink = Color(0xFF102A43);
-const blue = Color(0xFF2563EB);
-const muted = Color(0xFF526579);
 
 const mobileContentWidth = 390.0;
+
+/// Up to two initials from a display name, used by the avatar badges.
+String userInitials(String name) => name
+    .trim()
+    .split(RegExp(r'\s+'))
+    .where((part) => part.isNotEmpty)
+    .take(2)
+    .map((part) => part[0].toUpperCase())
+    .join();
 
 Future<T?> showMobileBottomSheet<T>({
   required BuildContext context,
@@ -342,6 +349,12 @@ class StatusBadge extends StatelessWidget {
         aicaTone(context, Color(0xFF188653)),
         aicaTone(context, Color(0xFFE5F6EB)),
       ),
+      ViolationStatus.paid => (
+        context.l10n.paid,
+        Icons.receipt_long,
+        aicaTone(context, Color(0xFF188653)),
+        aicaTone(context, Color(0xFFE5F6EB)),
+      ),
     };
     return Container(
       constraints: const BoxConstraints(maxWidth: 130),
@@ -488,7 +501,7 @@ class ViolationTile extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4),
-                  StatusBadge(violation.status),
+                  StatusBadge(effectiveStatus(violation)),
                 ],
               ),
             ],

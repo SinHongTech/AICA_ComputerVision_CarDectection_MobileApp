@@ -12,10 +12,12 @@ import 'vehicles_screen.dart';
 import 'violation_detail_screen.dart';
 import 'widgets/app_components.dart';
 
-const _font = 'Plus Jakarta Sans';
-const _blue = Color(0xFF155DFC);
-const _ink = Color(0xFF0E0E0F);
-const _muted = Color(0xFF8E8E93);
+String _greeting(BuildContext context) {
+  final hour = DateTime.now().hour;
+  if (hour < 12) return context.l10n.goodMorning;
+  if (hour < 18) return context.l10n.goodAfternoon;
+  return context.l10n.goodEvening;
+}
 
 TextStyle _type(
   double size,
@@ -23,7 +25,7 @@ TextStyle _type(
   Color color, {
   double? height,
 }) => TextStyle(
-  fontFamily: _font,
+  fontFamily: aicaFontFamily,
   fontFamilyFallback: khmerFontFallback,
   fontSize: size,
   fontWeight: weight,
@@ -69,13 +71,7 @@ class _Hero extends StatelessWidget {
     final dark = isDark(context);
     final vehicle = demoVehicles.first;
     final vehicleName = vehicle.name.replaceFirst(RegExp(r' \d{4}$'), '');
-    final initials = demoStore.name
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((part) => part.isNotEmpty)
-        .take(2)
-        .map((part) => part[0].toUpperCase())
-        .join();
+    final initials = userInitials(demoStore.name);
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 26),
       decoration: BoxDecoration(
@@ -106,7 +102,7 @@ class _Hero extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${context.l10n.goodMorning},',
+                      '${_greeting(context)},',
                       style: _type(
                         11,
                         FontWeight.w500,
@@ -138,8 +134,7 @@ class _Hero extends StatelessWidget {
                       color: Colors.white,
                       size: 21,
                     ),
-                    if (demoStore.readNotificationIds.length <
-                        demoNotifications.length)
+                    if (demoStore.hasUnreadNotifications)
                       Positioned(
                         right: 0,
                         top: 0,
@@ -305,7 +300,11 @@ class _QuickAction extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(icon, size: 23, color: dark ? Colors.white : _blue),
+            child: Icon(
+              icon,
+              size: 23,
+              color: dark ? Colors.white : aicaBlue(context),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -334,8 +333,10 @@ class _Activity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = isDark(context);
-    final speeding = demoViolations.firstWhere((v) => v.id == 'speeding');
-    final possible = demoViolations.firstWhere((v) => v.id == 'red-light');
+    final speeding = violationById('speeding');
+    final possible = violationById('red-light');
+    final speedingPaid =
+        speeding != null && demoStore.paidFineIds.contains(speeding.id);
     final paidTotal = demoViolations
         .where((v) => demoStore.paidFineIds.contains(v.id))
         .fold<int>(0, (sum, v) => sum + v.amount);
@@ -419,7 +420,7 @@ class _Activity extends StatelessWidget {
                   style: _type(
                     16,
                     FontWeight.w700,
-                    dark ? Colors.white : _ink,
+                    dark ? Colors.white : aicaInk(context),
                     height: 1.2,
                   ),
                 ),
@@ -433,32 +434,40 @@ class _Activity extends StatelessWidget {
               ),
             ],
           ),
-          _ActivityRow(
-            icon: Icons.speed,
-            title: violationTitle(context, speeding),
-            subtitle: _violationSubtitle(speeding),
-            amount: '-${riel(speeding.amount)}',
-            badge: context.l10n.homeConfirmed,
-            tone: dark ? const Color(0xFFFFA1A8) : const Color(0xFFDC2626),
-            badgeBackground: dark
-                ? const Color(0xFF462A34)
-                : const Color(0xFFFEF2F2),
-            onTap: () =>
-                openPage(context, ViolationDetailScreen(violation: speeding)),
-          ),
-          _ActivityRow(
-            icon: Icons.traffic,
-            title: violationTitle(context, possible),
-            subtitle: _violationSubtitle(possible),
-            amount: context.l10n.homeNoFineYet,
-            badge: context.l10n.homeUnderAiReview,
-            tone: dark ? const Color(0xFFFFD477) : const Color(0xFFB45309),
-            badgeBackground: dark
-                ? const Color(0xFF403820)
-                : const Color(0xFFFFFBEB),
-            onTap: () =>
-                openPage(context, ViolationDetailScreen(violation: possible)),
-          ),
+          if (speeding != null)
+            _ActivityRow(
+              icon: Icons.speed,
+              title: violationTitle(context, speeding),
+              subtitle: _violationSubtitle(speeding),
+              amount: speedingPaid
+                  ? riel(speeding.amount)
+                  : '-${riel(speeding.amount)}',
+              badge: speedingPaid
+                  ? context.l10n.paid
+                  : context.l10n.homeConfirmed,
+              tone: speedingPaid
+                  ? (dark ? const Color(0xFF78D8A9) : const Color(0xFF047857))
+                  : (dark ? const Color(0xFFFFA1A8) : const Color(0xFFDC2626)),
+              badgeBackground: speedingPaid
+                  ? (dark ? const Color(0xFF203C33) : const Color(0xFFECFDF5))
+                  : (dark ? const Color(0xFF462A34) : const Color(0xFFFEF2F2)),
+              onTap: () =>
+                  openPage(context, ViolationDetailScreen(violation: speeding)),
+            ),
+          if (possible != null)
+            _ActivityRow(
+              icon: Icons.traffic,
+              title: violationTitle(context, possible),
+              subtitle: _violationSubtitle(possible),
+              amount: context.l10n.homeNoFineYet,
+              badge: context.l10n.homeUnderAiReview,
+              tone: dark ? const Color(0xFFFFD477) : const Color(0xFFB45309),
+              badgeBackground: dark
+                  ? const Color(0xFF403820)
+                  : const Color(0xFFFFFBEB),
+              onTap: () =>
+                  openPage(context, ViolationDetailScreen(violation: possible)),
+            ),
           _ActivityRow(
             icon: Icons.verified_user_outlined,
             title: context.l10n.homeVehicleOnFile,
@@ -475,7 +484,9 @@ class _Activity extends StatelessWidget {
             icon: Icons.receipt_long_outlined,
             title: context.l10n.homeDemoReceipt,
             subtitle: context.l10n.homePrototypeSimulation,
-            amount: '+${riel(paidTotal == 0 ? 150000 : paidTotal)}',
+            amount: paidTotal > 0
+                ? '+${riel(paidTotal)}'
+                : context.l10n.homeNoPaymentsYet,
             badge: context.l10n.homeDemoPaid,
             tone: dark ? const Color(0xFF78D8A9) : const Color(0xFF047857),
             badgeBackground: dark
@@ -560,7 +571,7 @@ class _ActivityRow extends StatelessWidget {
                       style: _type(
                         12,
                         FontWeight.w600,
-                        dark ? Colors.white : _ink,
+                        dark ? Colors.white : aicaInk(context),
                         height: 1.2,
                       ),
                     ),
@@ -572,7 +583,7 @@ class _ActivityRow extends StatelessWidget {
                       style: _type(
                         10,
                         FontWeight.w400,
-                        dark ? const Color(0xFFAFBED0) : _muted,
+                        aicaMuted(context),
                         height: 1.2,
                       ),
                     ),
@@ -594,7 +605,7 @@ class _ActivityRow extends StatelessWidget {
                         style: _type(
                           11,
                           FontWeight.w700,
-                          dark ? Colors.white : _ink,
+                          dark ? Colors.white : aicaInk(context),
                         ),
                       ),
                       const SizedBox(height: 4),

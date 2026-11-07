@@ -1,4 +1,11 @@
-enum ViolationStatus { suspected, confirmed, underReview, disputed, resolved }
+enum ViolationStatus {
+  suspected,
+  confirmed,
+  underReview,
+  disputed,
+  resolved,
+  paid,
+}
 
 class Violation {
   const Violation({

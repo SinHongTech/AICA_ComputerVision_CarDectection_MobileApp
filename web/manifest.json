@@ -1,11 +1,11 @@
 {
-    "name": "car_detection",
-    "short_name": "car_detection",
+    "name": "Cambodia Smart Traffic",
+    "short_name": "Smart Traffic",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F8FAFC",
+    "theme_color": "#2563EB",
+    "description": "Cambodia Smart Traffic — AI traffic violation and driver services demo.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

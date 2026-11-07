@@ -584,6 +584,18 @@ abstract class AppLocalizations {
   /// **'Good morning'**
   String get goodMorning;
 
+  /// No description provided for @goodAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get goodAfternoon;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get goodEvening;
+
   /// No description provided for @notifications.
   ///
   /// In en, this message translates to:
@@ -902,29 +914,29 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profile;
 
-  /// No description provided for @all6.
+  /// No description provided for @allCount.
   ///
   /// In en, this message translates to:
-  /// **'All 6'**
-  String get all6;
+  /// **'All {count}'**
+  String allCount(int count);
 
-  /// No description provided for @toPay2.
+  /// No description provided for @toPayCount.
   ///
   /// In en, this message translates to:
-  /// **'To pay 2'**
-  String get toPay2;
+  /// **'To pay {count}'**
+  String toPayCount(int count);
 
-  /// No description provided for @inReview3.
+  /// No description provided for @inReviewCount.
   ///
   /// In en, this message translates to:
-  /// **'In review 3'**
-  String get inReview3;
+  /// **'In review {count}'**
+  String inReviewCount(int count);
 
-  /// No description provided for @done1.
+  /// No description provided for @doneCount.
   ///
   /// In en, this message translates to:
-  /// **'Done 1'**
-  String get done1;
+  /// **'Done {count}'**
+  String doneCount(int count);
 
   /// No description provided for @searchPlateOrLocation.
   ///
@@ -1075,6 +1087,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit for verification'**
   String get submitForVerification;
+
+  /// No description provided for @enterAPlateNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a plate number'**
+  String get enterAPlateNumber;
+
+  /// No description provided for @vehicleVerificationPendingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'{plate} was not added. Official registry verification is required.'**
+  String vehicleVerificationPendingFor(String plate);
 
   /// No description provided for @myVehiclesLabel.
   ///
@@ -1729,6 +1753,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Prototype simulation'**
   String get homePrototypeSimulation;
+
+  /// No description provided for @homeNoPaymentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments yet'**
+  String get homeNoPaymentsYet;
 
   /// No description provided for @homeDemoPaid.
   ///

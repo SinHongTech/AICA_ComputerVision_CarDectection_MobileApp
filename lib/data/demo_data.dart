@@ -124,5 +124,12 @@ const demoNotifications = <AppNotification>[
   ),
 ];
 
+Violation? violationById(String id) {
+  for (final violation in demoViolations) {
+    if (violation.id == id) return violation;
+  }
+  return null;
+}
+
 String riel(int amount) =>
     '${amount.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (match) => '${match[1]},')} ៛';

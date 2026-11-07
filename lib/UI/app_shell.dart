@@ -113,9 +113,7 @@ class _AppShellState extends State<AppShell> {
                                     icons[index],
                                     size: 20,
                                     color: selected
-                                        ? (isDark(context)
-                                              ? aicaBlue(context)
-                                              : const Color(0xFF155DFC))
+                                        ? aicaBlue(context)
                                         : aicaMuted(context),
                                   ),
                                   if (index == 1 &&
@@ -149,12 +147,10 @@ class _AppShellState extends State<AppShell> {
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: aicaFontFamily,
                                   fontFamilyFallback: khmerFontFallback,
                                   color: selected
-                                      ? (isDark(context)
-                                            ? aicaBlue(context)
-                                            : const Color(0xFF155DFC))
+                                      ? aicaBlue(context)
                                       : aicaMuted(context),
                                   fontSize: 9,
                                   height: 1.1,

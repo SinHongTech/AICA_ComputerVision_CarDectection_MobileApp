@@ -17,7 +17,7 @@ class ViolationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final confirmed = violation.status == ViolationStatus.confirmed;
+    final confirmed = effectiveStatus(violation) == ViolationStatus.confirmed;
     return DetailPage(
       title: context.l10n.violationDetails,
       bottom: Row(
@@ -99,7 +99,7 @@ class ViolationDetailScreen extends StatelessWidget {
                       left: 14,
                       bottom: 12,
                       child: Text(
-                        '${violation.date} ${violation.time}:07',
+                        '${violation.date} ${violation.time}',
                         style: TextStyle(
                           fontFamily: aicaFontFamily,
                           fontFamilyFallback: khmerFontFallback,
@@ -180,7 +180,7 @@ class ViolationDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              StatusBadge(violation.status),
+              StatusBadge(effectiveStatus(violation)),
             ],
           ),
           SizedBox(height: 12),

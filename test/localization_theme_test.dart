@@ -216,7 +216,6 @@ void main() {
             const LicenceScreen(),
             const NotificationsScreen(),
             const ProfileScreen(),
-            const LanguageScreen(),
             NotificationPreferencesScreen(
               permissionService: NotificationPermissionService.withGateway(
                 _PermissionGateway(),

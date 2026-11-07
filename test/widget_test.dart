@@ -6,6 +6,7 @@ import 'package:car_detection/UI/profile_screen.dart';
 import 'package:car_detection/UI/sign_in_screen.dart';
 import 'package:car_detection/UI/vehicles_screen.dart';
 import 'package:car_detection/UI/verify_screen.dart';
+import 'package:car_detection/UI/violation_detail_screen.dart';
 import 'package:car_detection/UI/violations_screen.dart';
 import 'package:car_detection/data/demo_data.dart';
 import 'package:car_detection/data/demo_store.dart';
@@ -152,6 +153,30 @@ void main() {
     expect(find.text('No fine yet'), findsOneWidget);
   });
 
+  testWidgets('Home shows no fabricated receipt before payment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: AppShell()));
+    expect(find.text('No payments yet'), findsOneWidget);
+    expect(find.text('+150,000 ៛'), findsNothing);
+
+    demoStore.payFines(['helmet']);
+    await tester.pump();
+    expect(find.text('No payments yet'), findsNothing);
+    expect(find.text('+30,000 ៛'), findsOneWidget);
+  });
+
+  test('phone input drops the local trunk zero', () {
+    demoStore.setPhone('012345678');
+    expect(demoStore.phone, '12 345 678');
+  });
+
+  test('appealing a confirmed fine removes it from payable', () {
+    expect(demoStore.payable.map((v) => v.id), contains('speeding'));
+    demoStore.submitAppeal('speeding', 'Signal was green');
+    expect(demoStore.payable.map((v) => v.id), isNot(contains('speeding')));
+  });
+
   testWidgets('profile language opens the Figma-style sheet', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(home: Scaffold(body: ProfileScreen())),
@@ -189,6 +214,27 @@ void main() {
 
     expect(find.text('Speeding (68 km/h in 50 zone)'), findsOneWidget);
     expect(find.text('Possible red-light violation'), findsNothing);
+  });
+
+  testWidgets('paid fines leave the to-pay filter and lose the pay button', (
+    tester,
+  ) async {
+    demoStore.payFines(['helmet']);
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: ViolationsScreen())),
+    );
+
+    expect(find.text('To pay 1'), findsOneWidget);
+    await tester.tap(find.text('To pay 1'));
+    await tester.pumpAndSettle();
+    expect(find.text('Speeding (68 km/h in 50 zone)'), findsOneWidget);
+    expect(find.text('No helmet'), findsNothing);
+
+    await tester.pumpWidget(
+      MaterialApp(home: ViolationDetailScreen(violation: demoViolations[2])),
+    );
+    expect(find.text('Pay fine'), findsNothing);
+    expect(find.text('Paid'), findsOneWidget);
   });
 
   testWidgets('selected violation opens its own details', (tester) async {

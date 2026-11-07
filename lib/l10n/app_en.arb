@@ -81,6 +81,8 @@
   "demoPrototypeUseCode123456": "Demo prototype: use code 123456.",
   "verifyContinue": "Verify & continue",
   "goodMorning": "Good morning",
+  "goodAfternoon": "Good afternoon",
+  "goodEvening": "Good evening",
   "notifications": "Notifications",
   "youHaveFinesToPay": "You have fines to pay",
   "label2ConfirmedPayBy31Oct2026": "2 confirmed · pay by 31 Oct 2026",
@@ -134,10 +136,38 @@
   "home": "Home",
   "violations": "Violations",
   "profile": "Profile",
-  "all6": "All 6",
-  "toPay2": "To pay 2",
-  "inReview3": "In review 3",
-  "done1": "Done 1",
+  "allCount": "All {count}",
+  "@allCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "toPayCount": "To pay {count}",
+  "@toPayCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inReviewCount": "In review {count}",
+  "@inReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doneCount": "Done {count}",
+  "@doneCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchPlateOrLocation": "Search plate or location",
   "aiDetectionsAreOnlySuspectedAFine": "ⓘ  AI detections are only suspected. A fine exists after official confirmation.",
   "noMatchingViolations": "No matching violations.",
@@ -163,6 +193,15 @@
   "officialRegistryVerificationIsNotConnectedIn": "Official registry verification is not connected in this demo.",
   "vehicleVerificationNeedsAnOfficialRegistryConnection": "Vehicle verification needs an official registry connection.",
   "submitForVerification": "Submit for verification",
+  "enterAPlateNumber": "Enter a plate number",
+  "vehicleVerificationPendingFor": "{plate} was not added. Official registry verification is required.",
+  "@vehicleVerificationPendingFor": {
+    "placeholders": {
+      "plate": {
+        "type": "String"
+      }
+    }
+  },
   "myVehiclesLabel": "My Vehicles",
   "add": "Add",
   "verifiedLabel": "✓ Verified",
@@ -303,5 +342,6 @@
   "homeDemoRecord": "Demo record",
   "homeDemoReceipt": "Sample demo receipt",
   "homePrototypeSimulation": "Prototype simulation",
+  "homeNoPaymentsYet": "No payments yet",
   "homeDemoPaid": "Demo paid"
 }

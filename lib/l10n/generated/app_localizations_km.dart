@@ -269,6 +269,12 @@ class AppLocalizationsKm extends AppLocalizations {
   String get goodMorning => 'អរុណសួស្តី';
 
   @override
+  String get goodAfternoon => 'ទិវាសួស្តី';
+
+  @override
+  String get goodEvening => 'សាយណ្ហសួស្តី';
+
+  @override
   String get notifications => 'ការជូនដំណឹង';
 
   @override
@@ -440,16 +446,24 @@ class AppLocalizationsKm extends AppLocalizations {
   String get profile => 'ប្រវត្តិរូប';
 
   @override
-  String get all6 => 'ទាំងអស់ 6';
+  String allCount(int count) {
+    return 'ទាំងអស់ $count';
+  }
 
   @override
-  String get toPay2 => 'ត្រូវបង់ 2';
+  String toPayCount(int count) {
+    return 'ត្រូវបង់ $count';
+  }
 
   @override
-  String get inReview3 => 'កំពុងពិនិត្យ 3';
+  String inReviewCount(int count) {
+    return 'កំពុងពិនិត្យ $count';
+  }
 
   @override
-  String get done1 => 'រួចរាល់ 1';
+  String doneCount(int count) {
+    return 'រួចរាល់ $count';
+  }
 
   @override
   String get searchPlateOrLocation => 'ស្វែងរកស្លាកលេខ ឬទីតាំង';
@@ -529,6 +543,14 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get submitForVerification => 'ដាក់ស្នើដើម្បីផ្ទៀងផ្ទាត់';
+
+  @override
+  String get enterAPlateNumber => 'សូមបញ្ចូលលេខស្លាក';
+
+  @override
+  String vehicleVerificationPendingFor(String plate) {
+    return 'មិនបានបន្ថែម $plate ទេ។ ត្រូវការការផ្ទៀងផ្ទាត់ពីបញ្ជីផ្លូវការ។';
+  }
 
   @override
   String get myVehiclesLabel => 'យានយន្តរបស់ខ្ញុំ';
@@ -885,6 +907,9 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get homePrototypeSimulation => 'ការសាកល្បងគំរូ';
+
+  @override
+  String get homeNoPaymentsYet => 'មិនទាន់មានការបង់ប្រាក់';
 
   @override
   String get homeDemoPaid => 'បានបង់ក្នុងគំរូ';

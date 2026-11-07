@@ -20,30 +20,36 @@ class _ViolationsScreenState extends State<ViolationsScreen> {
   int _filter = 0;
   String _query = '';
 
+  bool _matchesFilter(Violation violation, int filter) {
+    final status = effectiveStatus(violation);
+    return switch (filter) {
+      1 => status == ViolationStatus.confirmed,
+      2 =>
+        status == ViolationStatus.suspected ||
+            status == ViolationStatus.underReview ||
+            status == ViolationStatus.disputed,
+      3 => status == ViolationStatus.resolved || status == ViolationStatus.paid,
+      _ => true,
+    };
+  }
+
+  int _countFilter(int filter) =>
+      demoViolations.where((v) => _matchesFilter(v, filter)).length;
+
   @override
   Widget build(BuildContext context) {
     final visible = demoViolations.where((v) {
-      final statusMatches = switch (_filter) {
-        1 => v.status == ViolationStatus.confirmed,
-        2 => [
-          ViolationStatus.suspected,
-          ViolationStatus.underReview,
-          ViolationStatus.disputed,
-        ].contains(v.status),
-        3 => v.status == ViolationStatus.resolved,
-        _ => true,
-      };
       final queryMatches =
           '${v.title} ${violationTitle(context, v)} ${v.location} ${v.plate}'
               .toLowerCase()
               .contains(_query.toLowerCase());
-      return statusMatches && queryMatches;
+      return _matchesFilter(v, _filter) && queryMatches;
     }).toList();
     final filters = [
-      context.l10n.all6,
-      context.l10n.toPay2,
-      context.l10n.inReview3,
-      context.l10n.done1,
+      context.l10n.allCount(demoViolations.length),
+      context.l10n.toPayCount(_countFilter(1)),
+      context.l10n.inReviewCount(_countFilter(2)),
+      context.l10n.doneCount(_countFilter(3)),
     ];
     return ListView(
       padding: EdgeInsets.fromLTRB(16, 10, 16, 32),

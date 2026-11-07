@@ -6,7 +6,7 @@ Completed locally on 20 October 2026.
 
 Localization uses Flutter's standard ARB generation workflow, `flutter_localizations`, and `intl`. There is no custom localization engine. `l10n.yaml` configures generation into `lib/l10n/generated/`.
 
-There are **243 English resources and 243 Khmer resources**, including parameterized payment amounts, confirmation text, and the OTP phone-number prompt. Regenerate the Dart classes after editing ARB files with `flutter gen-l10n`.
+There are **278 English resources and 278 Khmer resources**, including parameterized payment amounts, confirmation text, violation filter counts, and the OTP phone-number prompt. Regenerate the Dart classes after editing ARB files with `flutter gen-l10n`.
 
 `context.l10n` accesses the generated localizations. Its English fallback supports existing isolated widget tests. `demo_labels.dart` maps known demo record IDs and stable preference keys to generated display labels; it does not change the underlying models or records.
 
@@ -61,7 +61,7 @@ Plate numbers, dates, phone numbers, monetary values, references, names, and veh
 
 ## Khmer Rendering and Layout
 
-Roboto remains the Latin font family, with `Noto Sans Khmer`, `Khmer OS`, and the platform sans-serif as fallbacks. Noto Sans Khmer was confirmed installed on the Linux host. Explicit widget styles and button/dialog styles include the same fallback.
+`Plus Jakarta Sans` is the Latin font family (bundled in `assets/fonts`), with `Noto Sans Khmer`, `Khmer OS`, and the platform sans-serif as fallbacks. Noto Sans Khmer was confirmed installed on the Linux host. Explicit widget styles and button/dialog styles include the same fallback.
 
 Longer labels can wrap in navigation, menu rows, status badges, vehicle verification steps, and licence-card columns. No smaller font was introduced to force Khmer into a fixed space.
 
@@ -115,7 +115,7 @@ Fourteen new tests cover:
 - Language, vehicle, and explanation sheets in all four combinations
 - Payment confirmation and completion in all four combinations
 
-All **62 tests pass**, including the previous 48 tests.
+All **86 tests pass** in the current suite.
 
 ## Validation
 
@@ -124,7 +124,7 @@ All **62 tests pass**, including the previous 48 tests.
 | `flutter pub get` | Passed |
 | `dart format lib test` | Passed |
 | `flutter analyze` | No issues |
-| `flutter test` | 62 passed |
+| `flutter test` | 86 passed (current suite) |
 | `git diff --check` | Passed |
 | `flutter run -d linux` | Built and launched |
 

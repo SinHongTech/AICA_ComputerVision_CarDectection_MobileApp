@@ -39,11 +39,10 @@ class NotificationsScreen extends StatelessWidget {
             InkWell(
               onTap: () {
                 demoStore.markRead(i);
-                final id = demoNotifications[i].violationId;
-                if (id != null) {
-                  final violation = demoViolations
-                      .where((v) => v.id == id)
-                      .first;
+                final violation = violationById(
+                  demoNotifications[i].violationId ?? '',
+                );
+                if (violation != null) {
                   openPage(
                     context,
                     ViolationDetailScreen(violation: violation),

@@ -134,43 +134,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   );
 }
 
-class LanguageScreen extends StatefulWidget {
-  const LanguageScreen({super.key});
-  @override
-  State<LanguageScreen> createState() => _LanguageScreenState();
-}
-
-class _LanguageScreenState extends State<LanguageScreen> {
-  @override
-  Widget build(BuildContext context) => DetailPage(
-    title: context.l10n.language,
-    child: AppPanel(
-      child: Column(
-        children: [
-          for (final (language, languageCode) in [
-            ('English', 'en'),
-            ('ខ្មែរ', 'km'),
-          ])
-            ListTile(
-              title: Text(language),
-              trailing: Icon(
-                demoStore.languageCode == languageCode
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-                color: aicaBlue(context),
-              ),
-              onTap: () {
-                setState(() {
-                  demoStore.setLanguage(languageCode);
-                });
-              },
-            ),
-        ],
-      ),
-    ),
-  );
-}
-
 class NotificationPreferencesScreen extends StatefulWidget {
   const NotificationPreferencesScreen({
     super.key,

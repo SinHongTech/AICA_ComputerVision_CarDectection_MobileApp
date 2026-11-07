@@ -145,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                 radius: 32,
                 backgroundColor: ink,
                 child: Text(
-                  'SV',
+                  userInitials(demoStore.name),
                   style: TextStyle(
                     fontFamily: aicaFontFamily,
                     fontFamilyFallback: khmerFontFallback,

@@ -18,7 +18,8 @@ groups.
 | Figma screen or component | Flutter implementation |
 | --- | --- |
 | App root and flow | `lib/main.dart` |
-| Splash/onboarding | `lib/UI/onboarding_screen.dart` |
+| Splash startup | `lib/UI/splash_screen.dart` |
+| Onboarding | `lib/UI/onboarding_screen.dart` |
 | Sign in | `lib/UI/sign_in_screen.dart` |
 | OTP verification | `lib/UI/verify_screen.dart` |
 | Main app and bottom navigation | `lib/UI/app_shell.dart` |
@@ -27,7 +28,8 @@ groups.
 | Violation detail / AI alert | `lib/UI/violation_detail_screen.dart` |
 | Appeal/dispute | `lib/UI/appeal_screen.dart` |
 | Payments and history | `lib/UI/payments_screen.dart` |
-| Review and demo payment result | `lib/UI/review_payment_screen.dart` |
+| Review payment | `lib/UI/review_payment_screen.dart` |
+| Payment processing, success and demo receipt | `lib/UI/payment_flow_screens.dart` |
 | Vehicles | `lib/UI/vehicles_screen.dart` |
 | Vehicle detail | `lib/UI/vehicle_detail_screen.dart` |
 | Driving licence | `lib/UI/licence_screen.dart` |
@@ -67,10 +69,12 @@ normal Design asset exports. These remain the known visual placeholders:
 - Flutter uses the platform Material icon set where Make uses web icons.
 - The app uses the device status and navigation bars; Figma/device chrome is not
   drawn into Flutter.
-- Evidence media, official registry data, real SMS, payment services, and Khmer
-  localization remain outside the visual parity scope.
+- Evidence media, official registry data, real SMS, and payment services remain
+  outside the visual parity scope.
 - Demo payment, appeal, notification-read state, and profile edits reset when the
   app process restarts.
+- English and Khmer localization plus light/dark theming are implemented with the
+  standard ARB workflow; see `STEP_6B_6C_LOCALIZATION_THEME.md`.
 
 ## Final visual pass
 

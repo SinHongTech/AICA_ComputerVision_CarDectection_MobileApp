@@ -266,6 +266,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goodMorning => 'Good morning';
 
   @override
+  String get goodAfternoon => 'Good afternoon';
+
+  @override
+  String get goodEvening => 'Good evening';
+
+  @override
   String get notifications => 'Notifications';
 
   @override
@@ -436,16 +442,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
-  String get all6 => 'All 6';
+  String allCount(int count) {
+    return 'All $count';
+  }
 
   @override
-  String get toPay2 => 'To pay 2';
+  String toPayCount(int count) {
+    return 'To pay $count';
+  }
 
   @override
-  String get inReview3 => 'In review 3';
+  String inReviewCount(int count) {
+    return 'In review $count';
+  }
 
   @override
-  String get done1 => 'Done 1';
+  String doneCount(int count) {
+    return 'Done $count';
+  }
 
   @override
   String get searchPlateOrLocation => 'Search plate or location';
@@ -525,6 +539,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitForVerification => 'Submit for verification';
+
+  @override
+  String get enterAPlateNumber => 'Enter a plate number';
+
+  @override
+  String vehicleVerificationPendingFor(String plate) {
+    return '$plate was not added. Official registry verification is required.';
+  }
 
   @override
   String get myVehiclesLabel => 'My Vehicles';
@@ -878,6 +900,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homePrototypeSimulation => 'Prototype simulation';
+
+  @override
+  String get homeNoPaymentsYet => 'No payments yet';
 
   @override
   String get homeDemoPaid => 'Demo paid';

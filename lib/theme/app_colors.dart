@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const aicaFontFamily = 'Roboto';
+const aicaFontFamily = 'Plus Jakarta Sans';
 const khmerFontFallback = ['Noto Sans Khmer', 'Khmer OS', 'sans-serif'];
 
 bool isDark(BuildContext context) =>

@@ -214,11 +214,11 @@ flutter pub get     Passed
 dart format lib test
                     Passed
 flutter analyze     Passed — no issues found
-flutter test        Passed — all 26 tests passed
+flutter test        Passed — all 86 tests passed (current suite)
 git diff --check    Passed
 ```
 
-The 26 passing tests consist of 12 new DTO/API preparation tests and 14 existing widget tests.
+The 12 DTO/API preparation tests added in Step 4A remain part of the current 86-test suite.
 
 ## 13. Git and Remote Status
 

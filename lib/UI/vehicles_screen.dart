@@ -18,6 +18,7 @@ class VehiclesScreen extends StatelessWidget {
       showDragHandle: true,
       builder: (sheetContext) {
         String type = 'Car';
+        String plate = '';
         return StatefulBuilder(
           builder: (context, setSheetState) => Padding(
             padding: EdgeInsets.fromLTRB(
@@ -82,6 +83,7 @@ class VehiclesScreen extends StatelessWidget {
                 SizedBox(height: 7),
                 TextField(
                   textCapitalization: TextCapitalization.characters,
+                  onChanged: (value) => plate = value,
                   decoration: InputDecoration(
                     hintText: '2AB-1234',
                     border: OutlineInputBorder(),
@@ -99,12 +101,20 @@ class VehiclesScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 18),
                 FilledButton(
-                  onPressed: () => showDemoMessage(
-                    context,
-                    context
-                        .l10n
-                        .vehicleVerificationNeedsAnOfficialRegistryConnection,
-                  ),
+                  onPressed: () {
+                    final trimmed = plate.trim();
+                    if (trimmed.isEmpty) {
+                      showDemoMessage(context, context.l10n.enterAPlateNumber);
+                      return;
+                    }
+                    showDemoMessage(
+                      context,
+                      context.l10n.vehicleVerificationPendingFor(
+                        trimmed.toUpperCase(),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  },
                   child: Text(context.l10n.submitForVerification),
                 ),
               ],
