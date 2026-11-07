@@ -51,3 +51,9 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Step Markdown
+STEP_*.md
+
+# Figma
+/docs/figma_mapping.md
