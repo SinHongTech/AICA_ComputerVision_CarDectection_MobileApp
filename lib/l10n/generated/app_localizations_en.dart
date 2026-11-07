@@ -257,9 +257,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resendCodeIn030 => 'Resend code in 0:30';
 
   @override
-  String get testBuildUseCode123456 => 'Test build: use code 123456.';
-
-  @override
   String get verifyContinue => 'Verify & continue';
 
   @override
@@ -323,9 +320,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get phoneNumber => 'Phone number';
-
-  @override
-  String get example12345678 => 'Example: 12 345 678';
 
   @override
   String get iAgreeToTheTermsAndThe =>

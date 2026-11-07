@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
@@ -183,41 +182,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             fontSize: 14,
                           ),
                         ),
-                        if (kDebugMode) ...[
-                          SizedBox(height: 16),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              color: aicaTone(context, Color(0xFFEAF1FF)),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: aicaBlue(context),
-                                  size: 20,
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    context.l10n.testBuildUseCode123456,
-                                    style: TextStyle(
-                                      fontFamily: aicaFontFamily,
-                                      fontFamilyFallback: khmerFontFallback,
-                                      color: aicaBlue(context),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                         Spacer(),
                         FilledButton(
                           onPressed: _code.text.length == 6 && !_isVerifying

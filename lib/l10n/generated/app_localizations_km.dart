@@ -260,9 +260,6 @@ class AppLocalizationsKm extends AppLocalizations {
   String get resendCodeIn030 => 'ផ្ញើលេខកូដម្តងទៀតក្នុង 0:30';
 
   @override
-  String get testBuildUseCode123456 => 'សាកល្បង៖ ប្រើលេខកូដ 123456។';
-
-  @override
   String get verifyContinue => 'ផ្ទៀងផ្ទាត់ និងបន្ត';
 
   @override
@@ -326,9 +323,6 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get phoneNumber => 'លេខទូរសព្ទ';
-
-  @override
-  String get example12345678 => 'ឧទាហរណ៍៖ 12 345 678';
 
   @override
   String get iAgreeToTheTermsAndThe =>

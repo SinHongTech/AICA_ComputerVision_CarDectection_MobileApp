@@ -566,12 +566,6 @@ abstract class AppLocalizations {
   /// **'Resend code in 0:30'**
   String get resendCodeIn030;
 
-  /// No description provided for @testBuildUseCode123456.
-  ///
-  /// In en, this message translates to:
-  /// **'Test build: use code 123456.'**
-  String get testBuildUseCode123456;
-
   /// No description provided for @verifyContinue.
   ///
   /// In en, this message translates to:
@@ -691,12 +685,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Phone number'**
   String get phoneNumber;
-
-  /// No description provided for @example12345678.
-  ///
-  /// In en, this message translates to:
-  /// **'Example: 12 345 678'**
-  String get example12345678;
 
   /// No description provided for @iAgreeToTheTermsAndThe.
   ///

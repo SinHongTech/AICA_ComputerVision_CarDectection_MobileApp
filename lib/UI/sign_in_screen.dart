@@ -177,16 +177,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 6),
-                        Text(
-                          context.l10n.example12345678,
-                          style: TextStyle(
-                            fontFamily: aicaFontFamily,
-                            fontFamilyFallback: khmerFontFallback,
-                            color: aicaMuted(context),
-                            fontSize: 12,
-                          ),
-                        ),
                         SizedBox(height: 24),
                         InkWell(
                           onTap: () => setState(() => _consented = !_consented),
